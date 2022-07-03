@@ -54,5 +54,5 @@ func formatDate(d string) string {
 }
 
 func getFileName() string {
-	return strconv.Itoa(int(time.Now().UnixMilli())) + ".txt"
+	return strconv.Itoa(int(time.Now().UnixNano())) + ".txt"
 }
