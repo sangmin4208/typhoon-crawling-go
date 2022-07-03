@@ -33,7 +33,7 @@ func toStringTyphoon(typhoon typhoon.Typhoon) string {
 	longitude := int(typhoon.Longitude * 10)
 	atm := typhoon.Atm
 	velocity := typhoon.Velocity
-	formatted := fmt.Sprintf("%v 005 5 %v %v  %v  %v\n", date, latitude, longitude, atm, velocity)
+	formatted := fmt.Sprintf("%v00 005 5 %v %v  %v  %v\n", date, latitude, longitude, atm, velocity)
 	return formatted
 }
 
