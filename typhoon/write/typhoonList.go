@@ -2,9 +2,11 @@ package write
 
 import (
 	"fmt"
+	"io/fs"
 	"io/ioutil"
 	"log"
-	"os"
+	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 
@@ -12,9 +14,10 @@ import (
 )
 
 func TyphoonList(path string, title string, typhoons []typhoon.Typhoon) {
-	filename := fmt.Sprintf("%v/%v.txt", path, filePrefix())
+
+	filename := filepath.Join(path, getFileName())
 	data := title + "\n" + toStringTyphoons(typhoons)
-	err := ioutil.WriteFile(filename, []byte(data), os.FileMode(0666))
+	err := ioutil.WriteFile(filename, []byte(data), fs.FileMode(0777))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -50,6 +53,6 @@ func formatDate(d string) string {
 	return fmt.Sprintf("%v%v%v%v", year, month, date, hour)
 }
 
-func filePrefix() int64 {
-	return time.Now().UnixMilli()
+func getFileName() string {
+	return strconv.Itoa(int(time.Now().UnixMilli())) + ".txt"
 }
