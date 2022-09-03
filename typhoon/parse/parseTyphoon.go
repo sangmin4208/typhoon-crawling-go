@@ -45,11 +45,6 @@ func parseRow(s *goquery.Selection) typhoon.Typhoon {
 	longitude, _ := strconv.ParseFloat(s.Find("td:nth-child(3)").Text(), 64)
 	atm, _ := strconv.ParseInt(s.Find("td:nth-child(4)").Text(), 10, 64)
 	velocity, _ := strconv.ParseInt(s.Find("td:nth-child(5)").Text(), 10, 64)
-	fmt.Println(date)
-	fmt.Println(latitude)
-	fmt.Println(longitude)
-	fmt.Println(atm)
-	fmt.Println(velocity)
 
 	return typhoon.Typhoon{
 		Date:      date,
