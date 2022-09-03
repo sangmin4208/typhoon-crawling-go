@@ -11,8 +11,8 @@ import (
 	"github.com/sangmin4208/typhoon-crawling-go/typhoon"
 )
 
-const tableSelector = "body > div.container > section > div > div.cont-wrap.cmp-typ-report > div:nth-child(2) > div.typhoon-report > div > div > div.over-scroll > table > tbody > tr"
 const titleSelector = "div.typhoon-cont > div.title"
+const tableSelector = "table.table-col > tbody > tr"
 
 func ParseTyphoonInfo(body io.Reader) string {
 	doc, err := goquery.NewDocumentFromReader(body)
@@ -33,18 +33,23 @@ func ParseTyphoonTable(body io.Reader) []typhoon.Typhoon {
 	}
 	typhoonList := make([]typhoon.Typhoon, 0)
 
-	doc.Find(tableSelector).Each(func(i int, s *goquery.Selection) {
+	doc.Find(tableSelector).Each(func(_ int, s *goquery.Selection) {
 		typhoonList = append(typhoonList, parseRow(s))
 	})
 	return typhoonList
 }
 
 func parseRow(s *goquery.Selection) typhoon.Typhoon {
-	date := s.Find("tr>td:nth-child(1)").Text()
-	latitude, _ := strconv.ParseFloat(s.Find("tr>td:nth-child(2)").Text(), 64)
-	longitude, _ := strconv.ParseFloat(s.Find("tr>td:nth-child(3)").Text(), 64)
-	atm, _ := strconv.ParseInt(s.Find("tr>td:nth-child(4)").Text(), 10, 64)
-	velocity, _ := strconv.ParseInt(s.Find("tr>td:nth-child(5)").Text(), 10, 64)
+	date := s.Find("td:nth-child(1)").Text()
+	latitude, _ := strconv.ParseFloat(s.Find("td:nth-child(2)").Text(), 64)
+	longitude, _ := strconv.ParseFloat(s.Find("td:nth-child(3)").Text(), 64)
+	atm, _ := strconv.ParseInt(s.Find("td:nth-child(4)").Text(), 10, 64)
+	velocity, _ := strconv.ParseInt(s.Find("td:nth-child(5)").Text(), 10, 64)
+	fmt.Println(date)
+	fmt.Println(latitude)
+	fmt.Println(longitude)
+	fmt.Println(atm)
+	fmt.Println(velocity)
 
 	return typhoon.Typhoon{
 		Date:      date,
@@ -56,7 +61,6 @@ func parseRow(s *goquery.Selection) typhoon.Typhoon {
 }
 
 func getTyphoonName(data string) string {
-	fmt.Println(data)
 	sp := strings.IndexRune(data, '(')
 	ep := strings.IndexRune(data, ')')
 	return strings.TrimSpace(data[sp+1 : ep])
